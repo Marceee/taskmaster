@@ -6,6 +6,8 @@
 	let taskId = 1;
 	const tasks = writable<Task[]>([]);
 
+	let filter: 'all' | 'completed' | 'pending' = 'all';
+
 	const addTask = () => {
 		if (newTask.trim()) {
 			tasks.update((currentTasks) => [
@@ -27,6 +29,10 @@
 	const deleteTask = (id: number) => {
 		tasks.update((currentTasks) => currentTasks.filter((task) => task.id !== id));
 	}
+
+	$: filteredTasks = $tasks.filter(task =>
+		filter === 'all' || (filter === 'completed' && task.completed) || (filter === 'pending' && !task.completed)
+	);
 </script>
 
 
@@ -35,6 +41,7 @@
 
 <div class="content-container">
 	<div class="input-container">
+		<div class="input-group">
 		<input
 			placeholder="Add a new task"
 			bind:value={newTask}
@@ -43,6 +50,12 @@
 		<button on:click={addTask}>Add</button>
 	</div>
 
+	<div class="filter-container">
+		<button on:click={() => filter = 'all'} class:active={filter === 'all'}>All</button>
+		<button on:click={() => filter = 'completed'} class:active={filter === 'completed'}>Completed</button>
+		<button on:click={() => filter = 'pending'} class:active={filter === 'pending'}>Pending</button>
+	</div>
+	</div>
 	<div class="table-container">
 		<table>
 			<thead>
@@ -54,7 +67,7 @@
 			</tr>
 			</thead>
 			<tbody>
-			{#each $tasks as task (task.id)}
+			{#each filteredTasks as task (task.id)}
 				<tr>
 					<td>{task.id}</td>
 					<td>{task.title}</td>
@@ -88,8 +101,13 @@
 
     .input-container {
         display: flex;
-        justify-content: flex-start;
+        justify-content: space-between;
+        align-items: center;
         margin-top: 20px;
+    }
+
+    .input-group {
+        display: flex;
     }
 
     input, button {
@@ -98,6 +116,22 @@
         border-radius: 4px;
         border: 1px solid #ddd;
         font-size: 1rem;
+    }
+
+    .filter-container button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        background-color: #ddd;
+        color: #333;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .filter-container button.active {
+        background-color: #324c16;
+        color: #fff;
     }
 
     .table-container {
