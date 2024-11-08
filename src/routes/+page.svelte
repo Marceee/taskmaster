@@ -3,8 +3,8 @@
 	import { onMount } from 'svelte';
 	import type { Task } from '../types';
 
-	let newTask = "";
-	let taskId = 1;
+	let newTask: string = "";
+	let taskId: number = 1;
 	const tasks = writable<Task[]>([]);
 
 	let filter: 'all' | 'completed' | 'pending' = 'all';
@@ -20,7 +20,7 @@
 		tasks.set(dummyTasks);
 	});
 
-	const addTask = () => {
+	const addTask = (): void => {
 		if (newTask.trim()) {
 			tasks.update((currentTasks) => [
 				...currentTasks,
@@ -30,7 +30,7 @@
 		}
 	}
 
-	const toggleTaskCompletion= (id: number) => {
+	const toggleTaskCompletion = (id: number): void => {
 		tasks.update((currentTasks) =>
 			currentTasks.map((task) =>
 				task.id === id ? { ...task, completed: !task.completed } : task
@@ -38,7 +38,7 @@
 		);
 	}
 
-	const deleteTask = (id: number) => {
+	const deleteTask = (id: number): void => {
 		tasks.update((currentTasks) => currentTasks.filter((task) => task.id !== id));
 	}
 
@@ -47,27 +47,26 @@
 	);
 </script>
 
-
-
 <h1>Behold the TaskMaster</h1>
 
 <div class="content-container">
 	<div class="input-container">
 		<div class="input-group">
-		<input
-			placeholder="Add a new task"
-			bind:value={newTask}
-			on:keyup={(e) => e.key === 'Enter' && addTask()}
-		/>
-		<button on:click={addTask}>Add</button>
+			<input
+				placeholder="Add a new task"
+				bind:value={newTask}
+				on:keyup={(e) => e.key === 'Enter' && addTask()}
+			/>
+			<button on:click={addTask}>Add</button>
+		</div>
+
+		<div class="filter-container">
+			<button on:click={() => filter = 'all'} class:active={filter === 'all'}>All</button>
+			<button on:click={() => filter = 'completed'} class:active={filter === 'completed'}>Completed</button>
+			<button on:click={() => filter = 'pending'} class:active={filter === 'pending'}>Pending</button>
+		</div>
 	</div>
 
-	<div class="filter-container">
-		<button on:click={() => filter = 'all'} class:active={filter === 'all'}>All</button>
-		<button on:click={() => filter = 'completed'} class:active={filter === 'completed'}>Completed</button>
-		<button on:click={() => filter = 'pending'} class:active={filter === 'pending'}>Pending</button>
-	</div>
-	</div>
 	<div class="table-container">
 		<table>
 			<thead>
