@@ -10,9 +10,9 @@
 	let filter: 'all' | 'completed' | 'pending' = 'all';
 
 	const dummyTasks: Task[] = [
-		{ id: taskId++, title: "Complete task master", completed: true },
+		{ id: taskId++, title: "Complete task master", description: "Learn SvelteKit", completed: true },
 		{ id: taskId++, title: "Buy groceries", completed: true },
-		{ id: taskId++, title: "Watch Lioness", completed: false },
+		{ id: taskId++, title: "Watch Lioness", description: "continue from ep 2", completed: false },
 		{ id: taskId++, title: "Prepare for the meeting", completed: false },
 	];
 
@@ -74,6 +74,7 @@
 			<tr>
 				<th>ID</th>
 				<th>Title</th>
+				<th>Description</th>
 				<th>Status</th>
 				<th>Actions</th>
 			</tr>
@@ -83,6 +84,7 @@
 				<tr>
 					<td>{task.id}</td>
 					<td>{task.title}</td>
+					<td>{task.description ? task.description : '-'}</td>
 					<td class:completed={task.completed}>
 						{task.completed ? 'Completed' : 'Pending'}
 					</td>
@@ -133,7 +135,7 @@
     .filter-container button {
         padding: 10px 20px;
         border: none;
-        border-radius: 4px;
+        border-radius: 30px;
         background-color: #ddd;
         color: #333;
         font-weight: bold;
