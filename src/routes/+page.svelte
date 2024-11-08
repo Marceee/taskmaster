@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
+	import { onMount } from 'svelte';
 	import type { Task } from '../types';
 
 	let newTask = "";
@@ -7,6 +8,17 @@
 	const tasks = writable<Task[]>([]);
 
 	let filter: 'all' | 'completed' | 'pending' = 'all';
+
+	const dummyTasks: Task[] = [
+		{ id: taskId++, title: "Complete task master", completed: true },
+		{ id: taskId++, title: "Buy groceries", completed: true },
+		{ id: taskId++, title: "Watch Lioness", completed: false },
+		{ id: taskId++, title: "Prepare for the meeting", completed: false },
+	];
+
+	onMount(() => {
+		tasks.set(dummyTasks);
+	});
 
 	const addTask = () => {
 		if (newTask.trim()) {
@@ -150,7 +162,7 @@
     th {
         background-color: #f4f4f4;
         color: #333;
-        font-weight: bold;
+        font-weight: 400;
         padding: 12px;
         text-align: left;
         border-bottom: 2px solid #ddd;
@@ -180,7 +192,7 @@
         border: none;
         border-radius: 4px;
         color: #fff;
-        font-weight: bold;
+        font-weight: 500;
         cursor: pointer;
         transition: background-color 0.3s ease;
     }
