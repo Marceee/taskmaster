@@ -2,6 +2,13 @@
 	import { addTask, toggleTaskCompletion, deleteTask, filter, filteredTasks } from '../store';
 
 	let newTask: string = "";
+
+	const handleAddTask = ()=> {
+		if (newTask.trim()) {
+			addTask(newTask);
+			newTask = "";
+		}
+	}
 </script>
 
 <h1>Behold the TaskMaster</h1>
@@ -12,9 +19,9 @@
 			<input
 				placeholder="Add a new task"
 				bind:value={newTask}
-				on:keyup={(e) => e.key === 'Enter' && addTask(newTask)}
+				on:keyup={(e) => e.key === 'Enter' && handleAddTask()}
 			/>
-			<button on:click={()=>addTask(newTask)}>Add</button>
+			<button on:click={handleAddTask}>Add</button>
 		</div>
 
 		<div class="filter-container">
