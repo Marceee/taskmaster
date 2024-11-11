@@ -1,50 +1,7 @@
 <script lang="ts">
-	import { writable } from 'svelte/store';
-	import { onMount } from 'svelte';
-	import type { Task } from '../../types';
+	import { addTask, toggleTaskCompletion, deleteTask, filter, filteredTasks } from '../store';
 
 	let newTask: string = "";
-	let taskId: number = 1;
-	const tasks = writable<Task[]>([]);
-
-	let filter: 'all' | 'completed' | 'pending' = 'all';
-
-	const dummyTasks: Task[] = [
-		{ id: taskId++, title: "Complete task master", description: "Learn SvelteKit", completed: true },
-		{ id: taskId++, title: "Buy groceries", completed: true },
-		{ id: taskId++, title: "Watch Lioness", description: "continue from ep 2", completed: false },
-		{ id: taskId++, title: "Prepare for the meeting", completed: false },
-	];
-
-	onMount(() => {
-		tasks.set(dummyTasks);
-	});
-
-	const addTask = (): void => {
-		if (newTask.trim()) {
-			tasks.update((currentTasks) => [
-				...currentTasks,
-				{ id: taskId++, title: newTask, completed: false },
-			]);
-			newTask = "";
-		}
-	}
-
-	const toggleTaskCompletion = (id: number): void => {
-		tasks.update((currentTasks) =>
-			currentTasks.map((task) =>
-				task.id === id ? { ...task, completed: !task.completed } : task
-			)
-		);
-	}
-
-	const deleteTask = (id: number): void => {
-		tasks.update((currentTasks) => currentTasks.filter((task) => task.id !== id));
-	}
-
-	$: filteredTasks = $tasks.filter(task =>
-		filter === 'all' || (filter === 'completed' && task.completed) || (filter === 'pending' && !task.completed)
-	);
 </script>
 
 <h1>Behold the TaskMaster</h1>
@@ -55,15 +12,15 @@
 			<input
 				placeholder="Add a new task"
 				bind:value={newTask}
-				on:keyup={(e) => e.key === 'Enter' && addTask()}
+				on:keyup={(e) => e.key === 'Enter' && addTask(newTask)}
 			/>
-			<button on:click={addTask}>Add</button>
+			<button on:click={()=>addTask(newTask)}>Add</button>
 		</div>
 
 		<div class="filter-container">
-			<button on:click={() => filter = 'all'} class:active={filter === 'all'}>All</button>
-			<button on:click={() => filter = 'completed'} class:active={filter === 'completed'}>Completed</button>
-			<button on:click={() => filter = 'pending'} class:active={filter === 'pending'}>Pending</button>
+			<button on:click={() => filter.set('all')} class:active={$filter === 'all'}>All</button>
+			<button on:click={() => filter.set('completed')} class:active={$filter === 'completed'}>Completed</button>
+			<button on:click={() => filter.set('pending')} class:active={$filter === 'pending'}>Pending</button>
 		</div>
 	</div>
 
@@ -79,7 +36,7 @@
 			</tr>
 			</thead>
 			<tbody>
-			{#each filteredTasks as task (task.id)}
+			{#each $filteredTasks as task (task.id)}
 				<tr>
 					<td>{task.id}</td>
 					<td>{task.title}</td>
