@@ -1,5 +1,5 @@
 <script>
-	import { filter, filteredTasks, selectedTask, showTaskDetails } from '../../store';
+	import { deleteTask, filter, filteredTasks, selectedTask, showTaskDetails } from '../../store';
 	import TaskInput from '../TaskInput.svelte';
 
 	console.log(selectedTask)
@@ -36,14 +36,14 @@
 	<div class="task-details">
 		{#if $selectedTask}
 			<div class="section-header">Task Details</div>
-			<div>Title</div>
-			<input type="text" bind:value={$selectedTask.title} placeholder="Task Title" />
+			<div class="task-detail-label">Title</div>
+			<input class="input-test" type="text" bind:value={$selectedTask.title} placeholder="Task Title" />
 
-			<div>Description</div>
+			<div class="task-detail-label">Description</div>
 			<textarea bind:value={$selectedTask.description} placeholder="Enter task description"></textarea>
 
 			<button class="save-button">Update</button>
-			<button class="delete-button">Delete Task</button>
+			<button class="delete-button" on:click={()=>deleteTask($selectedTask.id)}>Delete</button>
 		{:else}
 			<p>Select a task to view details.</p>
 		{/if}
@@ -123,6 +123,27 @@
         padding: 20px;
         box-sizing: border-box;
     }
+
+    .task-detail-label {
+				padding: 5px 0;
+		}
+
+		.input-test {
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		textarea {
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			width: 100%;
+			height: 150px;
+			box-sizing: border-box;
+		}
 
     .save-button, .delete-button {
         padding: 10px 20px;
