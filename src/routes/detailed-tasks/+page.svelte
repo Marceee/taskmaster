@@ -1,5 +1,5 @@
 <script>
-	import { deleteTask, filter, filteredTasks, selectedTask, showTaskDetails } from '../../store';
+	import { deleteTask, filter, filteredTasks, selectedTask, showTaskDetails, updateTask } from '../../store';
 	import TaskInput from '../TaskInput.svelte';
 </script>
 
@@ -16,7 +16,7 @@
 
 	<!-- Task List Section -->
 	<div class="task-list">
-		<div class="section-header">Today <span>{$filteredTasks.length}</span></div>
+		<div class="section-header"><span>{$filteredTasks.length}</span> Tasks Today</div>
 		<TaskInput />
 
 		{#each $filteredTasks as task}
@@ -40,7 +40,7 @@
 			<div class="task-detail-label">Description</div>
 			<textarea bind:value={$selectedTask.description} placeholder="Enter task description"></textarea>
 
-			<button class="save-button">Update</button>
+			<button class="save-button" on:click={() => updateTask($selectedTask.id, { title: $selectedTask.title, description: $selectedTask.description })}>Update</button>
 			<button class="delete-button" on:click={()=>deleteTask($selectedTask.id)}>Delete</button>
 		{:else}
 			<p>Select a task to view details.</p>

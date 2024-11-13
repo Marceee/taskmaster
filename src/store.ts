@@ -33,6 +33,16 @@ const addTask = (title: string): void => {
 	}
 };
 
+const updateTask = (taskId: number, updates: Partial<Task>) => {
+	tasks.update((tasks) => {
+		const taskIndex = tasks.findIndex((task) => task.id === taskId);
+		if (taskIndex !== -1) {
+			tasks[taskIndex] = { ...tasks[taskIndex], ...updates };
+		}
+		return tasks;
+	});
+};
+
 const toggleTaskCompletion = (id: number): void => {
 	tasks.update((currentTasks) =>
 		currentTasks.map((task) =>
@@ -43,7 +53,7 @@ const toggleTaskCompletion = (id: number): void => {
 
 const deleteTask = (id: number): void => {
 	tasks.update((currentTasks) => currentTasks.filter((task) => task.id !== id));
-	selectedTask.set({} as Task);
+	selectedTask.set(null);
 };
 
-export { tasks, addTask, toggleTaskCompletion, deleteTask, showTaskDetails, selectedTask, filter, filteredTasks };
+export { tasks, addTask, toggleTaskCompletion, deleteTask, updateTask, showTaskDetails, selectedTask, filter, filteredTasks };
