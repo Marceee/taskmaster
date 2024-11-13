@@ -1,8 +1,6 @@
 <script>
 	import { deleteTask, filter, filteredTasks, selectedTask, showTaskDetails } from '../../store';
 	import TaskInput from '../TaskInput.svelte';
-
-	console.log(selectedTask)
 </script>
 
 <div class="app-container">
@@ -34,8 +32,8 @@
 
 	<!-- Task Details Section -->
 	<div class="task-details">
+		<div class="section-header">Task Details</div>
 		{#if $selectedTask}
-			<div class="section-header">Task Details</div>
 			<div class="task-detail-label">Title</div>
 			<input class="input-test" type="text" bind:value={$selectedTask.title} placeholder="Task Title" />
 

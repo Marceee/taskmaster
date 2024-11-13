@@ -10,7 +10,7 @@ const tasks = writable<Task[]>([
 	{ id: taskId++, title: "Prepare for the meeting", completed: false },
 ]);
 
-const selectedTask: Writable<Task> = writable({} as Task);
+const selectedTask: Writable<Task | null> = writable(null);
 
 const showTaskDetails = (task: Task)=> {
 	selectedTask.set(task);
@@ -43,6 +43,7 @@ const toggleTaskCompletion = (id: number): void => {
 
 const deleteTask = (id: number): void => {
 	tasks.update((currentTasks) => currentTasks.filter((task) => task.id !== id));
+	selectedTask.set({} as Task);
 };
 
 export { tasks, addTask, toggleTaskCompletion, deleteTask, showTaskDetails, selectedTask, filter, filteredTasks };
