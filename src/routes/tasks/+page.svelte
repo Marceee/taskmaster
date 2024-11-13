@@ -1,28 +1,14 @@
 <script lang="ts">
-	import { addTask, toggleTaskCompletion, deleteTask, filter, filteredTasks } from '../store';
+	import {toggleTaskCompletion, deleteTask, filter, filteredTasks } from '../../store';
+	import TaskInput from '../TaskInput.svelte';
 
-	let newTask: string = "";
-
-	const handleAddTask = ()=> {
-		if (newTask.trim()) {
-			addTask(newTask);
-			newTask = "";
-		}
-	}
 </script>
 
 <h1>Behold the TaskMaster</h1>
 
 <div class="content-container">
 	<div class="input-container">
-		<div class="input-group">
-			<input
-				placeholder="Add a new task"
-				bind:value={newTask}
-				on:keyup={(e) => e.key === 'Enter' && handleAddTask()}
-			/>
-			<button on:click={handleAddTask}>Add</button>
-		</div>
+		<TaskInput />
 
 		<div class="filter-container">
 			<button on:click={() => filter.set('all')} class:active={$filter === 'all'}>All</button>
@@ -81,18 +67,6 @@
         justify-content: space-between;
         align-items: center;
         margin-top: 20px;
-    }
-
-    .input-group {
-        display: flex;
-    }
-
-    input, button {
-        padding: 10px 60px;
-        margin: 4px;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        font-size: 1rem;
     }
 
     .filter-container button {

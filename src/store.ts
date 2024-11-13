@@ -1,5 +1,5 @@
 import { derived, writable } from 'svelte/store';
-import type { Task } from '../types';
+import type { Task } from './types';
 
 let taskId: number = 1;
 
