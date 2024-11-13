@@ -10,7 +10,7 @@
 	<div class="input-container">
 		<TaskInput />
 
-		<div class="filter-container">
+		<div class="tags-container">
 			<button on:click={() => filter.set('all')} class:active={$filter === 'all'}>All</button>
 			<button on:click={() => filter.set('completed')} class:active={$filter === 'completed'}>Completed</button>
 			<button on:click={() => filter.set('pending')} class:active={$filter === 'pending'}>Pending</button>
@@ -69,7 +69,7 @@
         margin-top: 20px;
     }
 
-    .filter-container button {
+    .tags-container button {
         padding: 10px 20px;
         border: none;
         border-radius: 30px;
@@ -80,7 +80,7 @@
         transition: background-color 0.3s ease;
     }
 
-    .filter-container button.active {
+    .tags-container button.active {
         background-color: #324c16;
         color: #fff;
     }
