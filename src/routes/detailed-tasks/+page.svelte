@@ -1,13 +1,14 @@
 <script>
-	import { filter, filteredTasks } from '../../store';
+	import { filter, filteredTasks, selectedTask, showTaskDetails } from '../../store';
 	import TaskInput from '../TaskInput.svelte';
+
+	console.log(selectedTask)
 </script>
 
 <div class="app-container">
 	<!-- Sidebar -->
 	<div class="sidebar">
 		<div class="section-header">Tags</div>
-
 		<div class="tags-container">
 			<button on:click={() => filter.set('all')} class:active={$filter === 'all'}>All</button>
 			<button on:click={() => filter.set('completed')} class:active={$filter === 'completed'}>Completed</button>
@@ -15,34 +16,37 @@
 		</div>
 	</div>
 
-	<!-- Mid Section -->
+	<!-- Task List Section -->
 	<div class="task-list">
 		<div class="section-header">Today <span>{$filteredTasks.length}</span></div>
-		<div class="container">
-			<TaskInput />
+		<TaskInput />
 
-			{#each $filteredTasks as task}
-				<div class="task">
-					<input type="checkbox" bind:checked={task.completed} />
-					<span class="task-title">{task.title}</span>
-					<button class="arrow" aria-label="Next">
-						<i class="fas fa-chevron-right"></i>
-					</button>
-				</div>
-			{/each}
-		</div>
+		{#each $filteredTasks as task}
+			<div class="task">
+				<input type="checkbox" bind:checked={task.completed} />
+				<span class="task-title">{task.title}</span>
+				<button class="arrow" aria-label="View Task Details" on:click={() => showTaskDetails(task)}>
+					<i class="fas fa-chevron-right"></i>
+				</button>
+			</div>
+		{/each}
 	</div>
 
 	<!-- Task Details Section -->
 	<div class="task-details">
-		<div class="section-header">Task:</div>
-		<input type="text" placeholder="Task Title" />
+		{#if $selectedTask}
+			<div class="section-header">Task Details</div>
+			<div>Title</div>
+			<input type="text" bind:value={$selectedTask.title} placeholder="Task Title" />
 
-		<div>Description</div>
-		<textarea placeholder="Enter task description"></textarea>
+			<div>Description</div>
+			<textarea bind:value={$selectedTask.description} placeholder="Enter task description"></textarea>
 
-		<button class="save-button">Save</button>
-		<button class="delete-button">Delete Task</button>
+			<button class="save-button">Update</button>
+			<button class="delete-button">Delete Task</button>
+		{:else}
+			<p>Select a task to view details.</p>
+		{/if}
 	</div>
 </div>
 
@@ -63,8 +67,8 @@
         width: 20%;
         padding: 20px;
         background-color: #f4f4f4;
-        border-radius: 5px;
         border-right: 1px solid #ddd;
+        box-sizing: border-box;
     }
 
     .tags-container button {
@@ -76,6 +80,8 @@
         font-weight: bold;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        margin-bottom: 10px;
+        width: 100%;
     }
 
     .tags-container button.active {
@@ -84,24 +90,20 @@
     }
 
     .task-list {
-        flex: 1;
+        width: 50%;
         padding: 20px;
         border-right: 1px solid #ddd;
-    }
-
-    .container {
-        width: 100%;
+        box-sizing: border-box;
     }
 
     .task {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 100%;
         background-color: white;
         border: 1px solid #ddd;
-				padding-top: 10px;
-				padding-bottom: 10px;
+        padding: 10px;
+        margin-bottom: 10px;
     }
 
     .task-title {
@@ -119,6 +121,7 @@
     .task-details {
         width: 30%;
         padding: 20px;
+        box-sizing: border-box;
     }
 
     .save-button, .delete-button {
